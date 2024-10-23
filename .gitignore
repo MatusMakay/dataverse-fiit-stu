@@ -1,0 +1,11 @@
+minio-data
+letsencrypt
+database-data
+.env
+*.log
+data
+database-data
+minio-data
+solr-data
+docroot
+secrets
