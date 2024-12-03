@@ -78,6 +78,7 @@ services:
         - "traefik.http.services.solr.loadbalancer.server.port=8983"
         - "traefik.http.routers.solr.tls=true"
         - "traefik.http.routers.solr.tls.certresolver=myresolver"   
+    
     dataverse-fiit-stu:
       networks:
         - traefik-fiit-stu
@@ -166,46 +167,6 @@ services:
         - "traefik.http.services.dataverse.loadbalancer.server.port=8080"
         - "traefik.http.routers.dataverse.tls=true"
         - "traefik.http.routers.dataverse.tls.certresolver=myresolver"  
-    
-    minio-fiit-stu:
-      # Please use fixed versions :D
-      image: minio/minio:latest
-      container_name: minio-fiit-stu
-      networks:
-        - traefik-fiit-stu
-      volumes:
-        - ./minio-data:/data
-      command:
-        - server
-        - /data
-        - --console-address
-        - ":9001"
-      environment:
-        - MINIO_ROOT_USER=love
-        - MINIO_ROOT_PASSWORD=love1234
-        # Do NOT use MINIO_DOMAIN or MINIO_SERVER_URL with Traefik.
-        # All Routing is done by Traefik, just tell minio where to redirect to.
-        - MINIO_BROWSER_REDIRECT_URL=http://stash.localhost
-      deploy:
-        labels:
-          - traefik.enable=true
-          - traefik.http.routers.minio.service=minio
-          - traefik.http.routers.minio.rule=Host(`minio.${traefikhost}`)
-          - traefik.http.services.minio.loadbalancer.server.port=9000
-          - traefik.http.routers.minio-console.service=minio-console
-          - traefik.http.routers.minio-console.rule=Host(`minio-stash.${traefikhost}`)
-          - traefik.http.services.minio-console.loadbalancer.server.port=9001
-    # whoami-fiit-stu:
-    #   networks:
-    #     - traefik-fiit-stu
-    #   image: "containous/whoami"
-    #   container_name: "whoami"
-    #   labels:
-    #     - "traefik.enable=true"
-    #       # - "traefik.http.routers.whoami.entrypoints=web"
-    #     - "traefik.http.routers.whoami.rule=Host(`whoami.${traefikhost}`)"
-    #     - "traefik.http.routers.whoami.tls=true"
-    #     - "traefik.http.routers.whoami.tls.certresolver=myresolver" 
 volumes:
   database-data:
   solr-data:
