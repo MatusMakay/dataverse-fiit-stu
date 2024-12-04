@@ -2,41 +2,6 @@ version: '3.7'
 # Settings and configurations that are common for all containers
 
 services:
-    reverse-proxy-fiit-stu:
-    # The official v2 Traefik docker image
-      image: traefik:v2.2
-    # Enables the web UI and tells Traefik to listen to docker
-      container_name: reverse-proxy-fiit-stu
-      command:
-        - "--api.insecure=true"
-        - "--providers.docker=true"
-        - "--providers.docker.exposedbydefault=false"
-        - --providers.docker.network=traefik-fiit-stu
-        - "--entrypoints.web.address=:80"
-        - "--entrypoints.websecure.address=:443"
-        - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-        - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-        - "--entrypoints.web.http.redirections.entryPoint.priority=10" # disable permanent forwarding for every route
-        - "--certificatesresolvers.myresolver.acme.tlschallenge=true" # <== Enable TLS-ALPN-01 to generate and renew ACME certs
-        - "--certificatesresolvers.myresolver.acme.email=${useremail}"
-        - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-        - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      ports:
-        # The HTTP port
-        - "80:80"
-        # The HTTPS port
-        - "443:443"
-        # The Web UI (enabled by --api.insecure=true)
-        - "8089:8080"
-      volumes:
-        # So that Traefik can listen to the Docker events
-        - /var/run/docker.sock:/var/run/docker.sock
-        # volume to store letsencrypt certificates
-        - "./letsencrypt:/letsencrypt"
-      networks:
-        - traefik-fiit-stu
-
-
     postgres-fiit-stu:
       networks:
         - traefik-fiit-stu
@@ -72,12 +37,6 @@ services:
       volumes:
         - solr-data:/opt/solr/server/solr/collection1/data
         - ./config/schema.xml:/var/solr/data/collection1/conf/schema.xml
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.solr.rule=Host(`solr.${traefikhost}`)"
-        - "traefik.http.services.solr.loadbalancer.server.port=8983"
-        - "traefik.http.routers.solr.tls=true"
-        - "traefik.http.routers.solr.tls.certresolver=myresolver"   
     
     dataverse-fiit-stu:
       networks:
@@ -161,12 +120,7 @@ services:
         - ./init.d:/opt/payara/init.d
         - ./triggers:/opt/payara/triggers
         - ./config/schema.xml:/opt/payara/dvinstall/schema.xml
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.dataverse.rule=Host(`www.${traefikhost}`)"
-        - "traefik.http.services.dataverse.loadbalancer.server.port=8080"
-        - "traefik.http.routers.dataverse.tls=true"
-        - "traefik.http.routers.dataverse.tls.certresolver=myresolver"  
+
 volumes:
   database-data:
   solr-data:

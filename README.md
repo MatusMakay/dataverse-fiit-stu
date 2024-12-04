@@ -1,15 +1,17 @@
 # Dataverse Infrastructure at FIIT STU
 
 Dataverse is an open-source platform by Harvard University designed for sharing, preserving, and analyzing research data. Supporting FAIR principles, it offers flexible data organization, robust metadata, version control, secure collaboration, DOI registration, and API integration for seamless data management.
+
 ## Directory structure
 
 ### Prerequisites before starting docker-compose
+
 ``` 
 .
-├── config      
+├── config       # Solr schema indexing configuration
 │   └── schema.xml
-├── triggers
-│   ├── affiliations.sql
+├── init.d       # Initialization scripts
+├── triggers     # Triggers for external services
 │   ├── external-services.sql
 │   ├── external-services.py
 │   └── lang-properties.sql
