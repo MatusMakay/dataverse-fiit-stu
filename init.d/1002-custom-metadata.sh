@@ -35,5 +35,5 @@ if  [ -n "$custommetadatablock" ]; then
     /bin/cp /tmp/schema.xml ${HOME_DIR}/dvinstall/schema.xml
     wget https://github.com/IQSS/dataverse/releases/download/v5.1/updateSchemaMDB.sh -O /tmp/updateSchemaMDB.sh
     chmod +x updateSchemaMDB.sh
-    ./updateSchemaMDB.sh -s solr-fiit-stu:8983
+    ./updateSchemaMDB.sh -s solr-dataverse-stu:8983
 fi
