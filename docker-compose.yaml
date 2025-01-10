@@ -1,5 +1,4 @@
 version: '3.7'
-# Settings and configurations that are common for all containers
 
 services:
     postgres-dataverse-stu:
@@ -7,7 +6,7 @@ services:
         - dataverse-stu
       container_name: postgres-dataverse-stu
       ports:
-        - "5433:5432"
+        - "127.0.0.1:5433:5432"
       image: postgres:10.13
       restart: unless-stopped
       environment:
@@ -27,7 +26,7 @@ services:
       container_name: solr-dataverse-stu
       privileged: true
       ports:
-        - "8983:8983"
+        - "127.0.0.1:8983:8983"
       environment:
         - "SOLR_HOST=solr-dataverse-stu"
         - "SOLR_PORT=8983"
@@ -47,7 +46,7 @@ services:
         "root"
       ports:
         #- "443:443"
-        - "4848:4848"
+        - "127.0.0.1:4848:4848"
         - "8080:8080"
       environment:
         - "CVM_SERVER_NAME=CESSDA" #Optional
